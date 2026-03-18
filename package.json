@@ -45,6 +45,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "i18next-cli": "^1.30.5",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.4.2",
     "simple-git-hooks": "^2.13.1",
     "typescript": "~5.9.3",
@@ -52,6 +53,11 @@
     "vite": "^7.2.4"
   },
   "simple-git-hooks": {
-    "pre-commit": "npm run i18n:extract && git add public/locales && npm run lint"
+    "pre-commit": "npm run i18n:extract && git add public/locales && npx lint-staged",
+    "pre-push": "npm run lint"  
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": ["prettier --write", "eslint --fix"],
+    "src/**/*.{js,jsx,json,css,md}": ["prettier --write"]
   }
 }
