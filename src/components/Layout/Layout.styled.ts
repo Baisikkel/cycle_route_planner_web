@@ -10,6 +10,7 @@ export const Page = styled.div`
 export const Container = styled.div`
   width: min(1200px, 100%);
   margin: 0 auto;
+  overflow: auto;
   padding: ${({ theme }) => `${theme.spacing(5)} ${theme.spacing(4)}`};
 `
 
@@ -18,4 +19,3 @@ export const Main = styled.main`
   width: 100%;
   padding: ${({ theme }) => `${theme.spacing(2)} 0 ${theme.spacing(6)}`};
 `
-
