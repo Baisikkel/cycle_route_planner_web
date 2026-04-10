@@ -1,1 +1,1 @@
-export { default as MapComponent } from './MapLibre'
+export { default as AppMap } from './MapLibre'
