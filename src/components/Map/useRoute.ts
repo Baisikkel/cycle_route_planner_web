@@ -1,4 +1,4 @@
-import { length as turfLength } from '@turf/turf'
+import { length as turfLength } from '@turf/length'
 import type { Feature, FeatureCollection } from 'geojson'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
