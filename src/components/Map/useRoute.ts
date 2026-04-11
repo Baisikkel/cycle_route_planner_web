@@ -80,6 +80,9 @@ export function useRoute(): RouteContextValue {
   // Tracks in-flight fetch so stale responses are discarded.
   const fetchIdRef = useRef(0)
 
+  // Incremented by setEnd to trigger the effect; avoids calling setState inside an effect.
+  const [fetchTrigger, setFetchTrigger] = useState(0)
+
   useEffect(() => {
     const params = fetchParamsRef.current
     if (!params) return
@@ -112,14 +115,14 @@ export function useRoute(): RouteContextValue {
     return () => {
       cancelled = true
     }
-  }, [finishFetching, failFetching])
+  }, [fetchTrigger, finishFetching, failFetching])
 
   const setEnd = useCallback(
     (point: LatLon | null) => {
       setEndRaw(point)
       if (point && start) {
         fetchParamsRef.current = { start, end: point }
-        setStatus('loading')
+        setFetchTrigger((n) => n + 1)
       } else {
         fetchParamsRef.current = null
       }
