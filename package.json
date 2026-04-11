@@ -17,6 +17,9 @@
   "dependencies": {
     "@tanstack/react-query": "^5.62.7",
     "@tanstack/react-query-devtools": "^5.62.7",
+    "@turf/bbox": "^7.3.4",
+    "@turf/length": "^7.3.4",
+    "@turf/turf": "^7.3.4",
     "axios": "^1.13.2",
     "i18next": "^23.15.1",
     "i18next-browser-languagedetector": "^8.0.0",
@@ -57,10 +60,15 @@
   },
   "simple-git-hooks": {
     "pre-commit": "npm run i18n:extract && git add public/locales && npx lint-staged",
-    "pre-push": "npm run lint"  
+    "pre-push": "npm run lint"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": ["prettier --write", "eslint --fix"],
-    "src/**/*.{js,jsx,json,css,md}": ["prettier --write"]
+    "src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "src/**/*.{js,jsx,json,css,md}": [
+      "prettier --write"
+    ]
   }
 }

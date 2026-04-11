@@ -7,14 +7,13 @@
  * - NavigationControl is optional UX (zoom); safe to remove if headers/chrome are redesigned.
  * - reset start/route on API error so the user can retry without a full page reload.
  */
-import type { FeatureCollection } from 'geojson'
 import { useCallback, useState } from 'react'
 import Map, { Layer, NavigationControl, Source } from 'react-map-gl/maplibre'
 
-import { fetchRoute } from '@api/routing'
+import { MapContainer, MapFrame, MapHint } from './Map.styled'
+import { useRoute } from './useRoute'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { MapContainer, MapFrame, MapHint } from './Map.styled'
 
 const TALLINN_CENTER = {
   latitude: 59.4372,
@@ -24,7 +23,7 @@ const TALLINN_CENTER = {
 
 const MAP_STYLE = 'https://tiles.openfreemap.org/styles/bright'
 
-type LatLon = { lat: number; lon: number }
+export type LatLon = { lat: number; lon: number }
 
 /** MapLibre layer spec for the route geometry — visual only; tweak for brand/accessibility. */
 const lineLayerStyle = {
@@ -42,20 +41,27 @@ const lineLayerStyle = {
 }
 
 const MapLibre = () => {
-  /** First click; cleared after a failed fetch so the user can pick again. */
-  const [start, setStart] = useState<LatLon | null>(null)
-  /** GeoJSON from GET /api/routes/calculate; null until a successful fetch. */
-  const [route, setRoute] = useState<FeatureCollection | null>(null)
-  const [hint, setHint] = useState<string>('Click map: 1) start 2) end. Click again after a route to reset.')
+  const {
+    route,
+    // status,
+    // error,
+    start,
+    setStart,
+    setEnd,
+    clearRoute,
+  } = useRoute()
+  const [hint, setHint] = useState<string>(
+    'Click map: 1) start 2) end. Click again after a route to reset.',
+  )
   const [loadError, setLoadError] = useState<string | null>(null)
 
   const onMapClick = useCallback(
-    async (e: { lngLat: { lat: number; lng: number } }) => {
+    (e: { lngLat: { lat: number; lng: number } }) => {
       const { lat, lng } = e.lngLat
       setLoadError(null)
 
       if (route) {
-        setRoute(null)
+        clearRoute()
         setStart({ lat, lon: lng })
         setHint('Start set. Click end point.')
         return
@@ -68,21 +74,9 @@ const MapLibre = () => {
       }
 
       setHint('Loading route…')
-      try {
-        // Order matches backend: startLat, startLon, endLat, endLon (BRouter lon/lat is handled in Java).
-        const geojson = await fetchRoute(start.lat, start.lon, lat, lng)
-        setRoute(geojson)
-        setHint('Route shown. Click map to pick a new start.')
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'Could not load route'
-        setLoadError(message)
-        setHint('Click end point again or click map to reset start.')
-        setStart(null)
-        setRoute(null)
-
-      }
+      setEnd({ lat, lon: lng })
     },
-    [route, start],
+    [route, start, clearRoute, setStart, setEnd],
   )
 
   return (
