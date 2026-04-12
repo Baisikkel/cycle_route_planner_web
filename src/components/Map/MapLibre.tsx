@@ -22,6 +22,8 @@ import type { MapRef } from 'react-map-gl/maplibre'
 import Map, { Layer, Marker, NavigationControl, Popup, Source } from 'react-map-gl/maplibre'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { PreviewPanel } from '@components/PreviewPanel'
+
 import {
   BikeEmoji,
   LocationPin,
@@ -93,11 +95,30 @@ function getHint(
 
 const MapLibre = () => {
   const { permission, position, heading, error: geoError } = useGeolocation()
-  const { route, start, end, status, error: routeError, setStart, setEnd, clearRoute } = useRoute()
+  const {
+    route,
+    start,
+    end,
+    metadata,
+    status,
+    error: routeError,
+    setStart,
+    setEnd,
+    clearRoute,
+  } = useRoute()
 
   const [popupPoint, setPopupPoint] = useState<LatLon | null>(null)
   const [manualStart, setManualStart] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [panelCollapsed, setPanelCollapsed] = useState(false)
+
+  // Reset panel collapsed state when route loads
+  useEffect(() => {
+    if (status === 'success' || status === 'loading') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPanelCollapsed(false)
+    }
+  }, [status])
 
   const { displayPosition, isOffRoute, shouldReroute } = useRouteTracking(position, route)
 
@@ -233,9 +254,10 @@ const MapLibre = () => {
       setStart({ lat: position.latitude, lon: position.longitude })
       pendingEndRef.current = popupPoint
     } else {
+      clearRoute()
       setEnd(popupPoint)
     }
-  }, [popupPoint, position, manualStart, start, setStart, setEnd])
+  }, [popupPoint, position, manualStart, start, setStart, setEnd, clearRoute])
 
   /** Store lat/lon, center map on it, show popup. */
   const openPopup = useCallback((point: LatLon) => {
@@ -416,6 +438,14 @@ const MapLibre = () => {
           )}
         </Map>
       </MapFrame>
+      <PreviewPanel
+        metadata={metadata}
+        status={status}
+        error={routeError}
+        collapsed={panelCollapsed}
+        onStartNavigation={() => console.log('Start Navigation clicked')}
+        onCollapse={() => setPanelCollapsed(true)}
+      />
     </MapContainer>
   )
 }
