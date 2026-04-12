@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 /**
  * Map layout wrapper (VAN-60 + route drawing).
@@ -7,12 +7,26 @@ import styled from 'styled-components'
  * a short instruction line above the map (MapHint), the map needed to keep filling the *remaining*
  * space — flex lets MapFrame take "the rest" after the hint. Safe to simplify back to a single
  * div + Map only if you remove MapHint and want the original layout.
+ *
+ * When $navigationActive is true (user tapped "Let's ride"), the container goes fullscreen
+ * via position:fixed — overlaying the entire viewport without changing the DOM structure.
+ * Header/footer stay in the DOM but are hidden underneath. This avoids touching AppLayout.
  */
-export const MapContainer = styled.div`
+export const MapContainer = styled.div<{ $navigationActive?: boolean }>`
   display: flex;
   flex-direction: column;
   width: auto;
   height: 75vh;
+
+  ${({ $navigationActive }) =>
+    $navigationActive &&
+    css`
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      height: 100vh;
+      width: 100vw;
+    `}
 `
 
 /**
@@ -21,12 +35,22 @@ export const MapContainer = styled.div`
  * Why min-height: 0: flex children default to min-height:auto, which can prevent shrinking and
  * clip the map — common flex gotcha. Do not remove if MapHint stays above the map.
  *
- * Popup style overrides: MapLibre's default .maplibregl-popup-content has padding and
- * box-shadow that conflict with our custom popup. We reset them here.
+ * Why position: relative: the navigation overlay panels (TopPanel, BottomPanel) and the
+ * fixed-position navigation arrow use position:absolute — they need a positioned ancestor
+ * to stay within the map area. Without this, they'd position relative to the viewport.
+ *
+ * Popup z-index override: during navigation mode, the overlay panels have z-index:10.
+ * MapLibre renders popups inside the map canvas container, which has no z-index by default.
+ * We elevate .maplibregl-popup to z-index:20 so long-press popups appear above the panels.
  */
 export const MapFrame = styled.div`
   flex: 1;
   min-height: 0;
+  position: relative;
+
+  .maplibregl-popup {
+    z-index: 20;
+  }
 
   .maplibregl-popup-content {
     padding: 0;
@@ -178,4 +202,29 @@ export const WaypointPinTip = styled.div<{ $color: string }>`
 export const WaypointIcon = styled.span`
   font-size: 0.85rem;
   line-height: 1;
+`
+
+/**
+ * Navigation arrow — fixed overlay just above the bottom panel during navigation.
+ * NOT a map marker — it stays at a fixed screen position while the map moves underneath.
+ * The map center is offset via easeTo({ padding }) in useNavigationMode so the user's
+ * GPS position aligns with this arrow's screen position.
+ *
+ * Positioned at ~155px from the bottom — just above the bottom panel's visible arc
+ * (the bottom circle peeks ~140px onto screen). This gives the Waze-style "driver view"
+ * where the arrow sits low and the road ahead fills the screen.
+ *
+ * The SVG arrow is 60px and rotates with GPS heading to show direction of travel.
+ */
+export const NavigationArrowOverlay = styled.div<{ $heading: number | null }>`
+  position: absolute;
+  bottom: 155px;
+  left: calc(50% - 30px);
+  transform: rotate(${({ $heading }) => ($heading != null ? $heading : 0)}deg);
+  transition: transform 0.5s ease;
+  z-index: 5;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
 `

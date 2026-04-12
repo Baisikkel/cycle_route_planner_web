@@ -53,9 +53,15 @@ function extractLineString(route: FeatureCollection): LineString | null {
  *  - snapped.geometry.coordinates returns [longitude, latitude]
  *  - We convert back to { latitude, longitude } for react-map-gl Marker props
  */
+/**
+ * @param immediateReroute — when true (active navigation), skip the 10s countdown
+ *   and trigger reroute as soon as user is off-route. When false (planning mode),
+ *   wait OFF_ROUTE_SECONDS before triggering to avoid false positives from GPS drift.
+ */
 export function useRouteTracking(
   rawPosition: Position | null,
   route: FeatureCollection | null,
+  immediateReroute = false,
 ): RouteTrackingState {
   const [displayPosition, setDisplayPosition] = useState<Position | null>(null)
   const [distanceFromRoute, setDistanceFromRoute] = useState<number | null>(null)
@@ -118,9 +124,12 @@ export function useRouteTracking(
       setDisplayPosition(rawPosition)
 
       if (dist >= OFF_ROUTE_METERS) {
-        // User is off-route — start or continue the re-route countdown
+        // User is off-route — reroute immediately in active navigation,
+        // or start the countdown in planning mode to avoid GPS drift false positives
         setIsOffRoute(true)
-        if (offRouteStartRef.current === null) {
+        if (immediateReroute) {
+          setShouldReroute(true)
+        } else if (offRouteStartRef.current === null) {
           offRouteStartRef.current = Date.now()
         } else if (Date.now() - offRouteStartRef.current >= OFF_ROUTE_SECONDS * 1000) {
           setShouldReroute(true)
@@ -131,7 +140,7 @@ export function useRouteTracking(
         offRouteStartRef.current = null
       }
     }
-  }, [rawPosition, route])
+  }, [rawPosition, route, immediateReroute])
 
   /**
    * GPS updates aren't continuous — there can be seconds between callbacks.
