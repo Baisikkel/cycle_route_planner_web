@@ -22,6 +22,7 @@ export async function fetchRoute(
 ): Promise<FeatureCollection> {
   const response = await apiClient.get<FeatureCollection>('/routes/calculate', {
     params: { startLat, startLon, endLat, endLon },
+    timeout: 30000,
   })
   return response.data
 }
