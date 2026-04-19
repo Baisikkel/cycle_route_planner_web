@@ -10,7 +10,7 @@ export function AppHeader({ actions }: Props) {
   return (
     <Bar>
       <Inner>
-        <Brand to="/">Cycle Route Planner</Brand>
+        <Brand to="/">Baisikkel Route Planner</Brand>
         {actions && <Actions>{actions}</Actions>}
       </Inner>
     </Bar>

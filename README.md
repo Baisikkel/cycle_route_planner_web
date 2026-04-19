@@ -1,4 +1,4 @@
-# Cycle Route Planner — Frontend
+# Baisikkel Route Planner — Frontend
 
 React + Vite SPA. TypeScript throughout.
 

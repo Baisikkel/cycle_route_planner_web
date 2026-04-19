@@ -9,7 +9,7 @@ export function AppFooter() {
   return (
     <Shell>
       <Inner>
-        © {year} {t('Cycle Route Planner. All rights reserved.')}
+        © {year} {t('Baisikkel Route Planner. All rights reserved.')}
       </Inner>
     </Shell>
   )
