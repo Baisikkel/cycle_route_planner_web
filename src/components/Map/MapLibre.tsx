@@ -21,8 +21,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import Map, { Layer, Marker, NavigationControl, Popup, Source } from 'react-map-gl/maplibre'
 
-import 'maplibre-gl/dist/maplibre-gl.css'
 import { PreviewPanel } from '@components/PreviewPanel'
+import { MAP_STYLE_URL as MAP_STYLE } from '@config/map'
+import 'maplibre-gl/dist/maplibre-gl.css'
 
 import {
   BikeEmoji,
@@ -50,8 +51,6 @@ const TALLINN_CENTER = {
   longitude: 24.7535,
   zoom: 12,
 }
-
-const MAP_STYLE = 'https://tiles.openfreemap.org/styles/bright'
 
 const LONG_PRESS_MS = 400
 const LONG_PRESS_MOVE_THRESHOLD = 10

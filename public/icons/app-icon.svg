@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="#16a34a"/>
+  <!-- Wheels -->
+  <circle cx="152" cy="320" r="88" fill="none" stroke="#fff" stroke-width="28"/>
+  <circle cx="360" cy="320" r="88" fill="none" stroke="#fff" stroke-width="28"/>
+  <!-- Frame -->
+  <polyline points="152,320 220,180 290,180" fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="220,180 360,320 290,180 152,320" fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Handlebar -->
+  <line x1="290" y1="180" x2="340" y2="180" stroke="#fff" stroke-width="28" stroke-linecap="round"/>
+  <line x1="340" y1="168" x2="340" y2="200" stroke="#fff" stroke-width="20" stroke-linecap="round"/>
+  <!-- Seat post -->
+  <line x1="220" y1="180" x2="220" y2="148" stroke="#fff" stroke-width="24" stroke-linecap="round"/>
+  <line x1="196" y1="148" x2="244" y2="148" stroke="#fff" stroke-width="20" stroke-linecap="round"/>
+  <!-- Hub dots -->
+  <circle cx="152" cy="320" r="12" fill="#fff"/>
+  <circle cx="360" cy="320" r="12" fill="#fff"/>
+</svg>

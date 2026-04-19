@@ -12,6 +12,7 @@
     "i18n:extract": "i18next-cli extract --config i18next-cli.config.ts",
     "i18n:lint": "i18next-cli lint --config i18next-cli.config.ts",
     "preview": "vite preview",
+    "generate-pwa-assets": "pwa-assets-generator",
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
@@ -43,6 +44,7 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@types/styled-components": "^5.1.34",
+    "@vite-pwa/assets-generator": "^1.0.2",
     "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.1",
