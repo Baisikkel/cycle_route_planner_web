@@ -53,8 +53,6 @@ export function useRoute(): RouteContextValue {
     setMetadata(null)
     setStatus('idle')
     setError(null)
-    setStart(null)
-    setEndRaw(null)
   }, [])
 
   const finishFetching = useCallback(
