@@ -29,7 +29,6 @@
       "@app/*": ["src/app/*"],
       "@api/*": ["src/api/*"],
       "@components/*": ["src/components/*"],
-      "@config/*": ["src/config/*"],
       "@data/*": ["src/data/*"],
       "@features/*": ["src/features/*"],
       "@lib/*": ["src/lib/*"],

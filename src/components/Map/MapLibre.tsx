@@ -22,7 +22,7 @@ import type { MapRef } from 'react-map-gl/maplibre'
 import Map, { Layer, Marker, NavigationControl, Popup, Source } from 'react-map-gl/maplibre'
 
 import { PreviewPanel } from '@components/PreviewPanel'
-import { MAP_STYLE_URL as MAP_STYLE } from '@config/map'
+const MAP_STYLE = 'https://tiles.openfreemap.org/styles/bright'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 import {

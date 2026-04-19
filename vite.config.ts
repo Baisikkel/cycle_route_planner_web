@@ -3,8 +3,6 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
-import { MAP_TILE_HOST } from './src/config/map'
-
 export default defineConfig({
   plugins: [
     react(),
@@ -62,7 +60,7 @@ export default defineConfig({
           },
           {
             // Map tiles and style JSON from openfreemap.org — StaleWhileRevalidate
-            urlPattern: ({ url }) => url.hostname.includes(MAP_TILE_HOST),
+            urlPattern: ({ url }) => url.hostname.includes('openfreemap.org'),
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'map-tiles-cache',
