@@ -25,13 +25,14 @@
  *  - The backend converts to BRouter's lon,lat format internally
  */
 import bbox from '@turf/bbox'
+import 'maplibre-gl/dist/maplibre-gl.css'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { MapRef, ViewStateChangeEvent } from 'react-map-gl/maplibre'
 import Map, { Layer, Marker, NavigationControl, Popup, Source } from 'react-map-gl/maplibre'
 
+import { PreviewPanel } from '@components/PreviewPanel'
 import { useAppTranslation } from '@lib/i18n'
 
-import 'maplibre-gl/dist/maplibre-gl.css'
 import { ActiveRide, LetsRide } from './ActiveRide'
 import {
   BikeEmoji,
@@ -51,6 +52,7 @@ import {
   WaypointPinDot,
   WaypointPinTip,
 } from './Map.styled'
+import { formatDistance, formatETA } from './routeFormatters'
 import { useGeolocation } from './useGeolocation'
 import { useNavigationMode } from './useNavigationMode'
 import { useRoute } from './useRoute'
@@ -134,19 +136,33 @@ const MapLibre = () => {
   const { permission, position, heading, error: geoError } = useGeolocation()
   const {
     route,
-    metadata,
     start,
     end,
+    metadata,
     status,
-    isLoading,
     error: routeError,
     setStart,
     setEnd,
     clearRoute,
     startFetching,
+    isLoading,
   } = useRoute()
 
   const [popupPoint, setPopupPoint] = useState<LatLon | null>(null)
+  // const [manualStart, setManualStart] = useState(false)
+  // const [loading, setLoading] = useState(false)
+
+  // const { displayPosition, isOffRoute, shouldReroute } = useRouteTracking(position, route)
+  const [panelCollapsed, setPanelCollapsed] = useState(false)
+
+  // Reset panel collapsed state when route loads
+  useEffect(() => {
+    if (status === 'success' || status === 'loading') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPanelCollapsed(false)
+    }
+  }, [status])
+
   const [userSetStartManually, setUserSetStartManually] = useState(false)
 
   const wakeLockRef = useRef<WakeLockSentinel | null>(null)
@@ -326,9 +342,19 @@ const MapLibre = () => {
       setStart({ lat: position.latitude, lon: position.longitude })
       pendingEndRef.current = popupPoint
     } else {
+      clearRoute()
       setEnd(popupPoint)
     }
-  }, [popupPoint, position, userSetStartManually, start, setStart, setEnd, startFetching])
+  }, [
+    popupPoint,
+    position,
+    start,
+    setStart,
+    setEnd,
+    clearRoute,
+    userSetStartManually,
+    startFetching,
+  ])
 
   /** Store lat/lon and show popup at that position. No map movement. */
   const openPopup = useCallback((point: LatLon) => {
@@ -612,16 +638,25 @@ const MapLibre = () => {
         {isNavigating && (
           <ActiveRide
             autoFollow={autoFollow}
-            totalDistance={
-              metadata ? `${(metadata.distanceMeters / 1000).toFixed(1)} km` : undefined
-            }
-            totalTime={metadata ? `${Math.round(metadata.etaSeconds / 60)} min` : undefined}
+            totalDistance={metadata ? formatDistance(metadata.distanceMeters) : undefined}
+            totalTime={metadata ? formatETA(metadata.etaSeconds) : undefined}
+            remainingDistance={metadata ? formatDistance(metadata.distanceMeters) : undefined}
+            remainingTime={metadata ? formatETA(metadata.etaSeconds) : undefined}
             onCancel={stopRide}
             onRecenter={recenter}
             onRouteOverview={showRouteOverview}
           />
         )}
       </MapFrame>
+      {!isNavigating && (
+        <PreviewPanel
+          metadata={metadata}
+          status={status}
+          error={routeError}
+          collapsed={panelCollapsed}
+          onCollapse={() => setPanelCollapsed(true)}
+        />
+      )}
     </MapContainer>
   )
 }

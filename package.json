@@ -39,7 +39,7 @@
     "@eslint/js": "^9.39.1",
     "@tanstack/eslint-plugin-query": "^5.62.7",
     "@types/geojson": "^7946.0.16",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.12.2",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@types/styled-components": "^5.1.34",
@@ -57,7 +57,9 @@
     "simple-git-hooks": "^2.13.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vite-plugin-pwa": "^1.2.0",
+    "vite-tsconfig-paths": "^6.1.1"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run i18n:extract && git add public/locales && npx lint-staged",
