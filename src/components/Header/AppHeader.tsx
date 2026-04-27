@@ -1,17 +1,10 @@
-import type { ReactNode } from 'react'
+import { Bar, Brand, Inner } from './Header.styled'
 
-import { Actions, Bar, Brand, Inner } from './Header.styled'
-
-type Props = {
-  actions?: ReactNode
-}
-
-export function AppHeader({ actions }: Props) {
+export function AppHeader() {
   return (
     <Bar>
       <Inner>
         <Brand to="/">Baisikkel Route Planner</Brand>
-        {actions && <Actions>{actions}</Actions>}
       </Inner>
     </Bar>
   )
