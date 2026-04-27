@@ -2,7 +2,7 @@ import { Marker } from 'react-map-gl/maplibre'
 
 import { LocationPin, WaypointIcon, WaypointPinDot, WaypointPinTip } from './Map.styled'
 import { DESTINATION_COLOR, START_COLOR, STOP_COLOR } from './mapConfig'
-import type { LatLon, RouteWaypoint } from './useRoute'
+import type { LatLon, RouteWaypoint } from './routing/types'
 
 type WaypointMarkersProps = {
   start: LatLon | null

@@ -20,7 +20,7 @@ import { DESTINATION_COLOR, START_COLOR, STOP_COLOR } from './config'
 import * as S from './RoutePlanner.styled'
 import { SortableStopRow } from './SortableStopRow'
 import { WaypointRow } from './WaypointRow'
-import type { RouteWaypoint } from '../useRoute'
+import type { RouteWaypoint } from '../routing/types'
 
 type RoutePlannerProps = {
   waypoints: RouteWaypoint[]

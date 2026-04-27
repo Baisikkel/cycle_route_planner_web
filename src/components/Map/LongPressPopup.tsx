@@ -4,7 +4,7 @@ import { useAppTranslation } from '@lib/i18n'
 
 import { PopupChoice, PopupContent, PopupPinDot, PopupPinIcon, PopupPinTip } from './Map.styled'
 import { DESTINATION_COLOR, START_COLOR } from './mapConfig'
-import type { LatLon } from './useRoute'
+import type { LatLon } from './routing/types'
 
 type LongPressPopupProps = {
   point: LatLon

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 import { RouteContext } from './RouteContext'
-import { useRoute } from './useRoute'
+import { useRoute } from './routing/useRoute'
 
 export function RouteProvider({ children }: { children: ReactNode }) {
   const routeValue = useRoute()
@@ -9,4 +9,4 @@ export function RouteProvider({ children }: { children: ReactNode }) {
 }
 
 export { RouteContext }
-export type { RouteContextValue } from './useRoute'
+export type { RouteContextValue } from './routing/types'

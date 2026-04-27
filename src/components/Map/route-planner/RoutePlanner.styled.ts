@@ -139,7 +139,7 @@ export const SuggestionList = styled.div`
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  z-index: 25;
+  z-index: 9999;
   max-height: 220px;
   overflow-y: auto;
   background: ${({ theme }) => theme.colors.surface};
