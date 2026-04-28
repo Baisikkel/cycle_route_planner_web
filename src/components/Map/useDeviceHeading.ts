@@ -49,8 +49,11 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
         listenerRef.current = null
         eventNameRef.current = null
       }
+      setCompassHeading(null) // eslint-disable-line react-hooks/set-state-in-effect -- resetting stale compass data when navigation ends; not a cascading render
       return
     }
+
+    let cancelled = false
 
     const onOrientation = (e: DeviceOrientationEvent) => {
       const evt = e as OrientationEventWithWebkit
@@ -68,6 +71,8 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
     }
 
     const startListening = () => {
+      if (cancelled) return
+
       // Prefer deviceorientationabsolute (Android Chrome) for absolute compass heading.
       // Fall back to deviceorientation (iOS, Firefox) — supplemented by webkitCompassHeading on iOS.
       const useAbsolute = 'ondeviceorientationabsolute' in window
@@ -97,6 +102,7 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
     }
 
     return () => {
+      cancelled = true
       if (listenerRef.current && eventNameRef.current) {
         window.removeEventListener(eventNameRef.current, listenerRef.current as EventListener)
         listenerRef.current = null
@@ -105,8 +111,8 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
     }
   }, [active])
 
-  // Priority: compass (when active) > GPS > null
-  if (active && compassHeading != null) {
+  // Priority: compass > GPS > null
+  if (compassHeading != null) {
     return { heading: compassHeading, headingSource: 'compass' }
   }
   if (gpsHeading != null) {

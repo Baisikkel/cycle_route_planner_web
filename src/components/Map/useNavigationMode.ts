@@ -150,7 +150,7 @@ export function useNavigationMode(
     // Push a history entry so the browser back button / swipe-back exits navigation
     // instead of leaving the page. The popstate listener below handles the exit.
     window.history.pushState({ activeRide: true }, '')
-  }, [])
+  }, [setIsNavigating])
 
   /**
    * Exit navigation: return to planning view.
@@ -171,7 +171,7 @@ export function useNavigationMode(
         duration: 300,
       })
     }
-  }, [mapRef])
+  }, [mapRef, setIsNavigating])
 
   /** Re-enable auto-follow after user panned away. */
   const recenter = useCallback(() => {
@@ -238,7 +238,7 @@ export function useNavigationMode(
 
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
-  }, [isNavigating, mapRef])
+  }, [isNavigating, mapRef, setIsNavigating])
 
   return {
     autoFollow,
