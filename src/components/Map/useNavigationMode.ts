@@ -29,7 +29,7 @@ import type { MapRef } from 'react-map-gl/maplibre'
 type Position = { latitude: number; longitude: number }
 
 /** Street-level zoom for cycling navigation — close enough to see buildings and turns. */
-const NAVIGATION_ZOOM = 19
+const NAVIGATION_ZOOM = 18
 /** 3D tilt for look-ahead perspective while riding (like Google Maps navigation). */
 const NAVIGATION_PITCH = 50
 /** Smooth animation between GPS ticks (every 1–3 seconds). */
