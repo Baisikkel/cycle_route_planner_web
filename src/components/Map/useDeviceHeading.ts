@@ -82,11 +82,12 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
         .then((state) => {
           if (state === 'granted') {
             startListening()
+          } else {
+            console.warn('Compass permission denied — using GPS heading as fallback')
           }
-          // If denied, compassHeading stays null → GPS fallback
         })
-        .catch(() => {
-          // Permission API failed — compass unavailable, GPS fallback
+        .catch((err) => {
+          console.warn('Compass permission request failed — using GPS heading as fallback', err)
         })
     } else {
       // Android, desktop — no permission needed
