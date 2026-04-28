@@ -28,10 +28,10 @@ import type { MapRef } from 'react-map-gl/maplibre'
 
 type Position = { latitude: number; longitude: number }
 
-/** Street-level zoom for cycling navigation. */
-const NAVIGATION_ZOOM = 16
-/** Slight 3D tilt for better orientation while riding. */
-const NAVIGATION_PITCH = 20
+/** Street-level zoom for cycling navigation — close enough to see buildings and turns. */
+const NAVIGATION_ZOOM = 18
+/** 3D tilt for look-ahead perspective while riding (like Google Maps navigation). */
+const NAVIGATION_PITCH = 45
 /** Smooth animation between GPS ticks (every 1–3 seconds). */
 const EASE_DURATION_MS = 1000
 /** Pixel margin around the route when zooming to show the full route. */
