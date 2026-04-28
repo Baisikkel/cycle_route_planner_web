@@ -40,4 +40,5 @@
   "You are off route. Re-routing…": "Kaldusid rajalt kõrval. Ümbersuunamine…",
   "You are signed in as an editor. Admin tools are not visible to this role — sign in as Admin to see the difference.": "Oled sisse logitud toimetajana. Administraatori tööriistad ei ole sellele rollile nähtavad — logi sisse administraatorina, et näha erinevust.",
   "You have manage:account permission. In a real app this section would surface user management, audit logs, and other admin tools.": "Sul on manage:account õigus. Päris rakenduses kuvataks siin kasutajahaldust, auditiloge ja muid administraatori tööriistu."
+  ,"notifications": { "close": "Sulge" }
 }

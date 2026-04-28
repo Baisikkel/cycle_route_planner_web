@@ -3,6 +3,8 @@ import nearestPointOnLine from '@turf/nearest-point-on-line'
 import type { FeatureCollection, LineString } from 'geojson'
 import { useEffect, useRef, useState } from 'react'
 
+import { notifyError } from '../../lib/notify'
+
 type Position = { latitude: number; longitude: number }
 
 // TODO: review if meters and seconds are appropriate for biking and our use case
@@ -173,5 +175,13 @@ export function useRouteTracking(
     }
   }, [isOffRoute, shouldReroute])
 
+  useEffect(() => {
+    if (isOffRoute && !shouldReroute) {
+      notifyError('off_course')
+    }
+    if (shouldReroute) {
+      notifyError('rerouting')
+    }
+  }, [isOffRoute, shouldReroute])
   return { displayPosition, distanceFromRoute, isOffRoute, shouldReroute }
 }

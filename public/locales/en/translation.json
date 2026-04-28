@@ -24,6 +24,9 @@
   "Long-press map to set start and destination": "Long-press map to set start and destination",
   "Manage your profile and preferences.": "Manage your profile and preferences.",
   "New password": "New password",
+  "notifications": {
+    "close": "Close"
+  },
   "Password": "Password",
   "Permanently delete your account and all associated data.": "Permanently delete your account and all associated data.",
   "Personal information": "Personal information",
