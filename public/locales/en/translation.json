@@ -31,6 +31,9 @@
   "Manage your profile and preferences.": "Manage your profile and preferences.",
   "New password": "New password",
   "No address results": "No address results",
+  "notifications": {
+    "close": "Close"
+  },
   "Password": "Password",
   "Permanently delete your account and all associated data.": "Permanently delete your account and all associated data.",
   "Personal information": "Personal information",
