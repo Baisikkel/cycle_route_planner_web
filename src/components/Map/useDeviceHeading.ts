@@ -49,7 +49,6 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
         listenerRef.current = null
         eventNameRef.current = null
       }
-      setCompassHeading(null) // eslint-disable-line react-hooks/set-state-in-effect -- resetting stale compass data when navigation ends; not a cascading render
       return
     }
 
@@ -111,8 +110,8 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
     }
   }, [active])
 
-  // Priority: compass > GPS > null
-  if (compassHeading != null) {
+  // Priority: compass (only when active) > GPS > null
+  if (active && compassHeading != null) {
     return { heading: compassHeading, headingSource: 'compass' }
   }
   if (gpsHeading != null) {
