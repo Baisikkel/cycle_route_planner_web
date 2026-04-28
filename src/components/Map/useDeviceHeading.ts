@@ -43,14 +43,7 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
   const eventNameRef = useRef<string | null>(null)
 
   useEffect(() => {
-    if (!active) {
-      if (listenerRef.current && eventNameRef.current) {
-        window.removeEventListener(eventNameRef.current, listenerRef.current as EventListener)
-        listenerRef.current = null
-        eventNameRef.current = null
-      }
-      return
-    }
+    if (!active) return
 
     let cancelled = false
 
@@ -107,11 +100,12 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
         listenerRef.current = null
         eventNameRef.current = null
       }
+      setCompassHeading(null)
     }
   }, [active])
 
-  // Priority: compass (only when active) > GPS > null
-  if (active && compassHeading != null) {
+  // Priority: compass > GPS > null
+  if (compassHeading != null) {
     return { heading: compassHeading, headingSource: 'compass' }
   }
   if (gpsHeading != null) {
