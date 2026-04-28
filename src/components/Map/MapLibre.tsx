@@ -53,6 +53,7 @@ import {
   WaypointPinTip,
 } from './Map.styled'
 import { formatDistance, formatETA } from './routeFormatters'
+import { useDeviceHeading } from './useDeviceHeading'
 import { useGeolocation } from './useGeolocation'
 import { useNavigationMode } from './useNavigationMode'
 import { useRoute } from './useRoute'
@@ -133,7 +134,7 @@ function NavigationArrowSvg() {
 
 const MapLibre = () => {
   const { t } = useAppTranslation()
-  const { permission, position, heading, error: geoError } = useGeolocation()
+  const { permission, position, heading: gpsHeading, error: geoError } = useGeolocation()
   const {
     route,
     start,
@@ -190,15 +191,10 @@ const MapLibre = () => {
    * See useNavigationMode.ts for the full implementation.
    */
   const [isNavigating, setIsNavigating] = useState(false)
+  const { heading } = useDeviceHeading(gpsHeading, isNavigating)
 
-  const {
-    autoFollow,
-    startRide,
-    stopRide,
-    recenter,
-    handleUserInteraction,
-    showRouteOverview,
-  } = useNavigationMode(mapRef, position, heading, route, isNavigating, setIsNavigating)
+  const { autoFollow, startRide, stopRide, recenter, handleUserInteraction, showRouteOverview } =
+    useNavigationMode(mapRef, position, heading, route, isNavigating, setIsNavigating)
 
   // Pass isNavigating so rerouting is immediate during active ride, 10s delay otherwise
   const { displayPosition, isOffRoute, shouldReroute } = useRouteTracking(
