@@ -60,8 +60,6 @@ function getNavigationPadding(mapRef: React.RefObject<MapRef | null>) {
 }
 
 export type NavigationModeState = {
-  /** Whether the user is in active navigation (fullscreen, map follows). */
-  isNavigating: boolean
   /** Whether the map auto-follows the user's position. False when user pans away manually. */
   autoFollow: boolean
   /** Start navigation mode — map enters fullscreen and begins following. */
@@ -84,16 +82,19 @@ export type NavigationModeState = {
  *
  * @param mapRef — ref to the MapLibre map instance for imperative control
  * @param position — current GPS position from useGeolocation
- * @param heading — compass heading in degrees from useGeolocation (null when stationary)
+ * @param heading — best-available heading from useDeviceHeading (compass or GPS fallback)
  * @param route — current route GeoJSON from useRoute (needed for fitBounds on exit/overview)
+ * @param isNavigating — whether active navigation is on (lifted state from MapLibre)
+ * @param setIsNavigating — state setter for isNavigating (lifted state from MapLibre)
  */
 export function useNavigationMode(
   mapRef: React.RefObject<MapRef | null>,
   position: Position | null,
   heading: number | null,
   route: FeatureCollection | null,
+  isNavigating: boolean,
+  setIsNavigating: React.Dispatch<React.SetStateAction<boolean>>,
 ): NavigationModeState {
-  const [isNavigating, setIsNavigating] = useState(false)
   const [autoFollow, setAutoFollow] = useState(false)
 
   /**
@@ -240,7 +241,6 @@ export function useNavigationMode(
   }, [isNavigating, mapRef])
 
   return {
-    isNavigating,
     autoFollow,
     startRide,
     stopRide,

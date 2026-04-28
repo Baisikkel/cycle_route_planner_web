@@ -189,15 +189,16 @@ const MapLibre = () => {
    * Navigation mode hook — manages fullscreen, map following, and bearing rotation.
    * See useNavigationMode.ts for the full implementation.
    */
+  const [isNavigating, setIsNavigating] = useState(false)
+
   const {
-    isNavigating,
     autoFollow,
     startRide,
     stopRide,
     recenter,
     handleUserInteraction,
     showRouteOverview,
-  } = useNavigationMode(mapRef, position, heading, route)
+  } = useNavigationMode(mapRef, position, heading, route, isNavigating, setIsNavigating)
 
   // Pass isNavigating so rerouting is immediate during active ride, 10s delay otherwise
   const { displayPosition, isOffRoute, shouldReroute } = useRouteTracking(
