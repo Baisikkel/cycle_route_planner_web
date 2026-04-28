@@ -88,9 +88,11 @@ useDeviceHeading(gpsHeading, isNavigating) → { heading }
 
 Changes in `MapLibre.tsx`:
 1. Import `useDeviceHeading`
-2. Destructure GPS heading as `heading: gpsHeading` from `useGeolocation()`
-3. Call `const { heading } = useDeviceHeading(gpsHeading, isNavigating)`
-4. Pass `heading` (merged) to `useNavigationMode`, `BikeEmoji`, and `NavigationArrowOverlay` — same as current code, just a different source
+2. Destructure GPS heading as `heading: gpsHeading` from `useGeolocation()` — makes clear this is the raw GPS value, not the final heading
+3. Call `const { heading } = useDeviceHeading(gpsHeading, isNavigating)` — `heading` is the merged, best-available value
+4. Pass `heading` to `useNavigationMode`, `BikeEmoji`, and `NavigationArrowOverlay` — same variable name as before, so downstream code is unchanged
+
+**Naming convention:** `gpsHeading` = raw GPS-derived heading (only used as input to `useDeviceHeading`). `heading` = best-available merged heading (used everywhere else). This keeps downstream code clean and makes the data flow obvious at the wiring site.
 
 ### 4. No changes needed
 
