@@ -214,14 +214,13 @@ export const WaypointIcon = styled.span`
  * (the bottom circle peeks ~140px onto screen). This gives the Waze-style "driver view"
  * where the arrow sits low and the road ahead fills the screen.
  *
- * The SVG arrow is 60px and rotates with GPS heading to show direction of travel.
+ * The SVG arrow is 60px and always points up — the map itself rotates to match
+ * heading via easeTo({ bearing }), so the arrow just marks the user's position.
  */
-export const NavigationArrowOverlay = styled.div<{ $heading: number | null }>`
+export const NavigationArrowOverlay = styled.div`
   position: absolute;
   bottom: 155px;
   left: calc(50% - 30px);
-  transform: rotate(${({ $heading }) => ($heading != null ? $heading : 0)}deg);
-  transition: transform 0.5s ease;
   z-index: 5;
   width: 60px;
   height: 60px;

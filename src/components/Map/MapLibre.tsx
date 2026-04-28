@@ -193,6 +193,59 @@ const MapLibre = () => {
   const [isNavigating, setIsNavigating] = useState(false)
   const { heading } = useDeviceHeading(gpsHeading, isNavigating)
 
+  /**
+   * Arrow lag effect: the arrow smoothly chases the current heading using
+   * lerp interpolation in a requestAnimationFrame loop, giving it a natural
+   * "inertia" feel (like Google Maps / Waze navigation arrows).
+   *
+   * The map snaps to heading via easeTo, but the arrow smoothly catches up
+   * at its own pace — creating a subtle lag that feels physical.
+   */
+  const arrowRef = useRef<HTMLDivElement>(null)
+  const displayedHeadingRef = useRef<number>(0)
+  const targetHeadingRef = useRef<number>(0)
+  const rafRef = useRef<number>(0)
+
+  useEffect(() => {
+    if (!isNavigating) return
+
+    const animate = () => {
+      const target = targetHeadingRef.current
+      const current = displayedHeadingRef.current
+
+      let diff = target - current
+      if (diff > 180) diff -= 360
+      if (diff < -180) diff += 360
+
+      displayedHeadingRef.current = current + diff * 0.03
+
+      // Arrow rotation = difference between smoothed heading and actual map bearing.
+      // This makes the arrow lag behind the camera: when the map has already rotated
+      // but the lerp hasn't caught up, the arrow tilts slightly backward.
+      // Note: getBearing() returns -180..180, heading uses 0..360, so we must
+      // normalize the offset to the shortest rotation.
+      if (arrowRef.current && mapRef.current) {
+        const mapBearing = mapRef.current.getBearing()
+        let offset = displayedHeadingRef.current - mapBearing
+        // Normalize to -180..180 to prevent double-rotation
+        offset = (((offset % 360) + 540) % 360) - 180
+        arrowRef.current.style.transform = `rotate(${offset}deg)`
+      }
+
+      rafRef.current = requestAnimationFrame(animate)
+    }
+
+    rafRef.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [isNavigating, mapRef])
+
+  // Update target heading when compass/GPS heading changes
+  useEffect(() => {
+    if (heading != null) {
+      targetHeadingRef.current = heading
+    }
+  }, [heading])
+
   const { autoFollow, startRide, stopRide, recenter, handleUserInteraction, showRouteOverview } =
     useNavigationMode(mapRef, position, heading, route, isNavigating, setIsNavigating)
 
@@ -623,7 +676,7 @@ const MapLibre = () => {
          * Only visible when auto-follow is active (hidden when user pans away).
          */}
         {isNavigating && autoFollow && (
-          <NavigationArrowOverlay $heading={heading}>
+          <NavigationArrowOverlay ref={arrowRef}>
             <NavigationArrowSvg />
           </NavigationArrowOverlay>
         )}

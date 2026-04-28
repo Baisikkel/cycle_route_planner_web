@@ -29,9 +29,9 @@ import type { MapRef } from 'react-map-gl/maplibre'
 type Position = { latitude: number; longitude: number }
 
 /** Street-level zoom for cycling navigation — close enough to see buildings and turns. */
-const NAVIGATION_ZOOM = 18
+const NAVIGATION_ZOOM = 19
 /** 3D tilt for look-ahead perspective while riding (like Google Maps navigation). */
-const NAVIGATION_PITCH = 45
+const NAVIGATION_PITCH = 50
 /** Smooth animation between GPS ticks (every 1–3 seconds). */
 const EASE_DURATION_MS = 1000
 /** Pixel margin around the route when zooming to show the full route. */
@@ -96,7 +96,6 @@ export function useNavigationMode(
   setIsNavigating: React.Dispatch<React.SetStateAction<boolean>>,
 ): NavigationModeState {
   const [autoFollow, setAutoFollow] = useState(false)
-
   /**
    * Resets the map to a flat top-down view and zooms to show the full route.
    * @param withPanels — true when the overlay panels are still visible (route overview),
@@ -204,7 +203,6 @@ export function useNavigationMode(
    */
   useEffect(() => {
     if (!isNavigating || !autoFollow || !position || !mapRef.current) return
-
     mapRef.current.easeTo({
       center: [position.longitude, position.latitude],
       bearing: heading ?? 0,

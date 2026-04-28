@@ -62,17 +62,52 @@ export function useDeviceHeading(gpsHeading: number | null, active: boolean): De
       }
     }
 
+    const listen = (eventName: string) => {
+      window.addEventListener(eventName, onOrientation as EventListener)
+      listenerRef.current = onOrientation
+      eventNameRef.current = eventName
+    }
+
     const startListening = () => {
       if (cancelled) return
 
       // Prefer deviceorientationabsolute (Android Chrome) for absolute compass heading.
-      // Fall back to deviceorientation (iOS, Firefox) — supplemented by webkitCompassHeading on iOS.
-      const useAbsolute = 'ondeviceorientationabsolute' in window
-      const eventName = useAbsolute ? 'deviceorientationabsolute' : 'deviceorientation'
+      // However, 'ondeviceorientationabsolute' in window is true on desktop Chrome too
+      // (where no compass exists), so we try it first and fall back to deviceorientation
+      // if no events fire within 1 second.
+      if ('ondeviceorientationabsolute' in window) {
+        let receivedAbsolute = false
 
-      window.addEventListener(eventName, onOrientation as EventListener)
-      listenerRef.current = onOrientation
-      eventNameRef.current = eventName
+        const onFirstAbsolute = (e: Event) => {
+          const evt = e as DeviceOrientationEvent
+          // Chrome desktop fires this event with all-null values — ignore those
+          if (evt.alpha == null) return
+          receivedAbsolute = true
+          window.removeEventListener('deviceorientationabsolute', onFirstAbsolute)
+          onOrientation(evt)
+        }
+
+        window.addEventListener('deviceorientationabsolute', onFirstAbsolute)
+
+        setTimeout(() => {
+          if (cancelled) {
+            window.removeEventListener('deviceorientationabsolute', onFirstAbsolute)
+            return
+          }
+          if (receivedAbsolute) {
+            // Got absolute events — use that permanently
+            window.removeEventListener('deviceorientationabsolute', onFirstAbsolute)
+            listen('deviceorientationabsolute')
+          } else {
+            // No absolute events — fall back to regular deviceorientation
+            window.removeEventListener('deviceorientationabsolute', onFirstAbsolute)
+            listen('deviceorientation')
+          }
+        }, 1000)
+      } else {
+        // iOS / Firefox — use regular deviceorientation (with webkitCompassHeading on iOS)
+        listen('deviceorientation')
+      }
     }
 
     // iOS 13+ requires explicit permission request (must be called from a user gesture)
