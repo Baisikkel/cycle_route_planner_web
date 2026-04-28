@@ -103,13 +103,20 @@ export function RoutePlannerPage() {
 
   const markerPos = displayPosition ?? position
   const showLetsRide = !!route && status === 'success' && !isNavigating
-  const showGpsDotInNavigation = isNavigating && !autoFollow && markerPos
   const showWaypointMarkers = !isNavigating || !autoFollow
   const waypointMarkers = useMemo<AppMapMarker[]>(() => {
     if (!showWaypointMarkers) return []
 
     const markers: AppMapMarker[] = []
-    if (start) {
+    // ~1 m at the equator — enough to treat GPS-set start as "same point" while
+    // ignoring any real movement
+    const SAME_POINT_DEG = 1e-5
+    const startMatchesPosition =
+      !!start &&
+      !!position &&
+      Math.abs(start.lat - position.latitude) < SAME_POINT_DEG &&
+      Math.abs(start.lon - position.longitude) < SAME_POINT_DEG
+    if (start && !startMatchesPosition) {
       markers.push({
         id: 'start',
         latitude: start.lat,
@@ -142,7 +149,7 @@ export function RoutePlannerPage() {
     }
 
     return markers
-  }, [end, showWaypointMarkers, start, stops])
+  }, [end, position, showWaypointMarkers, start, stops])
 
   const hint = getMapHint(t, permission, !!route, isOffRoute && !shouldReroute, isLoading, !!start)
   const errorHint = geoError && !position ? ` - ${geoError}` : ''
@@ -172,9 +179,9 @@ export function RoutePlannerPage() {
               : null
           }
           showNavigationControl={!isNavigating}
-          userPosition={!isNavigating ? markerPos : null}
+          userPosition={markerPos}
           userHeading={heading}
-          navigationPosition={showGpsDotInNavigation ? markerPos : null}
+          navigationPosition={null}
           onMapClick={longPressPopup.onMapClick}
           onMapContextMenu={longPressPopup.onMapContextMenu}
           onMapTouchStart={longPressPopup.onMapTouchStart}
@@ -204,7 +211,7 @@ export function RoutePlannerPage() {
           />
         )}
 
-        {isNavigating && isLoading && <S.LoadingBikeOverlay>Ã°Å¸Å¡Â²</S.LoadingBikeOverlay>}
+        {isNavigating && isLoading && <S.LoadingBikeOverlay>🚲</S.LoadingBikeOverlay>}
 
         {isNavigating && autoFollow && (
           <S.NavigationArrowOverlay $heading={heading}>

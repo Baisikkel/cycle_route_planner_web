@@ -88,7 +88,7 @@ export const AppMapCanvas = forwardRef<AppMapHandle, AppMapCanvasProps>(function
         <Marker latitude={userPosition.latitude} longitude={userPosition.longitude} anchor="bottom">
           <LocationPin>
             <PinDot>
-              <BikeEmoji $heading={userHeading}>Ã°Å¸Å¡Â²</BikeEmoji>
+              <BikeEmoji $heading={userHeading}>🚲</BikeEmoji>
             </PinDot>
             <PinTip />
           </LocationPin>
