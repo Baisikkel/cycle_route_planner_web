@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react'
 
-import { RouteProvider } from '@components/Map'
-
 import { AuthProvider } from './AuthProvider'
 import { I18nProvider } from './I18nProvider'
 import { QueryProvider } from './QueryProvider'
@@ -16,9 +14,7 @@ export function AppProviders({ children }: Props) {
     <ThemeProvider>
       <I18nProvider>
         <QueryProvider>
-          <RouteProvider>
-            <AuthProvider>{children}</AuthProvider>
-          </RouteProvider>
+          <AuthProvider>{children}</AuthProvider>
         </QueryProvider>
       </I18nProvider>
     </ThemeProvider>

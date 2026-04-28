@@ -5,7 +5,7 @@ import { useAppTranslation } from '@lib/i18n'
 import { STOP_COLOR } from './config'
 import * as S from './RoutePlanner.styled'
 import { WaypointRow } from './WaypointRow'
-import type { RouteWaypoint } from '../routing/types'
+import type { RouteWaypoint } from '../../routing/types'
 
 type SortableStopRowProps = {
   waypoint: RouteWaypoint

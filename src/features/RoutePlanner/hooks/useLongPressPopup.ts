@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { LONG_PRESS_MOVE_THRESHOLD, LONG_PRESS_MS } from '../mapConfig'
-import type { LatLon } from '../useRoute'
+import type { AppMapPointerEvent, AppMapTouchEvent } from '@components/Map'
+import { LONG_PRESS_MOVE_THRESHOLD, LONG_PRESS_MS } from '@components/Map/mapConfig'
+
+import type { LatLon } from '../routing/types'
 
 export function useLongPressPopup() {
   const [popupPoint, setPopupPoint] = useState<LatLon | null>(null)
@@ -26,17 +28,13 @@ export function useLongPressPopup() {
   }, [])
 
   const onMapTouchStart = useCallback(
-    (event: {
-      lngLat: { lat: number; lng: number }
-      point: { x: number; y: number }
-      originalEvent: TouchEvent
-    }) => {
+    (event: AppMapTouchEvent) => {
       if (event.originalEvent.touches.length !== 1) {
         cancelLongPress()
         return
       }
 
-      touchStartGeoRef.current = { lat: event.lngLat.lat, lon: event.lngLat.lng }
+      touchStartGeoRef.current = event.lngLat
       touchStartPointRef.current = { x: event.point.x, y: event.point.y }
 
       longPressTimerRef.current = setTimeout(() => {
@@ -48,7 +46,7 @@ export function useLongPressPopup() {
   )
 
   const onMapTouchMove = useCallback(
-    (event: { point: { x: number; y: number }; originalEvent: TouchEvent }) => {
+    (event: AppMapTouchEvent) => {
       if (event.originalEvent.touches.length !== 1) {
         cancelLongPress()
         return
@@ -67,9 +65,9 @@ export function useLongPressPopup() {
   }, [cancelLongPress])
 
   const onMapContextMenu = useCallback(
-    (event: { lngLat: { lat: number; lng: number }; originalEvent: Event }) => {
+    (event: AppMapPointerEvent) => {
       event.originalEvent.preventDefault()
-      openPopup({ lat: event.lngLat.lat, lon: event.lngLat.lng })
+      openPopup(event.lngLat)
     },
     [openPopup],
   )

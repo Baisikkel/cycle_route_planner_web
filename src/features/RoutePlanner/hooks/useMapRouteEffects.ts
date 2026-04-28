@@ -1,9 +1,10 @@
 import bbox from '@turf/bbox'
 import type { FeatureCollection } from 'geojson'
 import { useEffect, useRef, type RefObject } from 'react'
-import type { MapRef } from 'react-map-gl/maplibre'
 
-import type { LatLon, RouteStatus, WaypointSource } from '../useRoute'
+import type { AppMapHandle } from '@components/Map'
+
+import type { LatLon, RouteStatus, WaypointSource } from '../routing/types'
 
 type Position = { latitude: number; longitude: number }
 
@@ -11,7 +12,7 @@ type UseMapRouteEffectsOptions = {
   clearRoute: () => void
   end: LatLon | null
   isNavigating: boolean
-  mapRef: RefObject<MapRef | null>
+  mapRef: RefObject<AppMapHandle | null>
   position: Position | null
   route: FeatureCollection | null
   setPanelCollapsed: (collapsed: boolean) => void

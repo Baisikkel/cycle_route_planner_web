@@ -8,7 +8,7 @@ import { useAppTranslation } from '@lib/i18n'
 import * as S from './RoutePlanner.styled'
 import { useAddressAutocomplete } from './useAddressAutocomplete'
 import { getSuggestionMeta } from './utils'
-import type { RouteWaypoint } from '../routing/types'
+import type { RouteWaypoint } from '../../routing/types'
 
 type WaypointRowProps = {
   waypoint: RouteWaypoint

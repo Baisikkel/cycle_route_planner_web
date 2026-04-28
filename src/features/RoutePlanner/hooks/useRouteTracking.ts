@@ -51,7 +51,7 @@ function extractLineString(route: FeatureCollection): LineString | null {
  * Coordinate convention:
  *  - Turf.js point() takes [longitude, latitude] (GeoJSON standard)
  *  - snapped.geometry.coordinates returns [longitude, latitude]
- *  - We convert back to { latitude, longitude } for react-map-gl Marker props
+ *  - We convert back to { latitude, longitude } for app map marker props
  */
 /**
  * @param immediateReroute — when true (active navigation), skip the 10s countdown

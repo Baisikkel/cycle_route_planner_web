@@ -24,7 +24,8 @@
 import bbox from '@turf/bbox'
 import type { FeatureCollection } from 'geojson'
 import { useCallback, useEffect, useState } from 'react'
-import type { MapRef } from 'react-map-gl/maplibre'
+
+import type { AppMapHandle } from '@components/Map'
 
 type Position = { latitude: number; longitude: number }
 
@@ -49,7 +50,7 @@ const ROUTE_BOUNDS_PADDING = 60
  *   offset from geometric center = desired Y - (containerHeight / 2)
  *   padding.top = offset * 2
  */
-function getNavigationPadding(mapRef: React.RefObject<MapRef | null>) {
+function getNavigationPadding(mapRef: React.RefObject<AppMapHandle | null>) {
   const container = mapRef.current?.getContainer()
   const height = container?.clientHeight ?? 700
   const arrowYFromTop = height - 150 - 30
@@ -88,7 +89,7 @@ export type NavigationModeState = {
  * @param route — current route GeoJSON from useRoute (needed for fitBounds on exit/overview)
  */
 export function useNavigationMode(
-  mapRef: React.RefObject<MapRef | null>,
+  mapRef: React.RefObject<AppMapHandle | null>,
   position: Position | null,
   heading: number | null,
   route: FeatureCollection | null,
