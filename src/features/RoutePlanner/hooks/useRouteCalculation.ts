@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { fetchRouteWaypoints, type RouteWaypointRequest } from '@api/routing'
 
@@ -14,6 +14,8 @@ import {
 } from '../routing/routeUtils'
 
 const PROFILE = 'fastbike'
+/** Collapse rapid waypoint changes before sending a request */
+const DEBOUNCE_MS = 400
 
 export function useRouteCalculation() {
   const startWaypoint = useRouteStore(selectStartWaypoint)
@@ -22,7 +24,6 @@ export function useRouteCalculation() {
   const startFetching = useRouteStore((state) => state.startFetching)
   const finishFetching = useRouteStore((state) => state.finishFetching)
   const failFetching = useRouteStore((state) => state.failFetching)
-  const fetchIdRef = useRef(0)
 
   const routeSignature = useMemo(() => {
     if (!startWaypoint || !destinationWaypoint) return ''
@@ -37,32 +38,36 @@ export function useRouteCalculation() {
     const routeWaypoints = JSON.parse(routeSignature) as RouteWaypointRequest[]
     if (routeWaypoints.length < 2) return
 
-    const fetchId = ++fetchIdRef.current
-    let cancelled = false
+    // Created before the timer so the cleanup can abort even if the timer
+    // hasn't fired yet (rapid changes) or has already fired (request in-flight).
+    const controller = new AbortController()
 
-    startFetching()
+    const timer = setTimeout(() => {
+      startFetching()
 
-    fetchRouteWaypoints(routeWaypoints, PROFILE)
-      .then(({ geojson, metadata: serverMetadata }) => {
-        if (cancelled || fetchId !== fetchIdRef.current) return
+      fetchRouteWaypoints(routeWaypoints, PROFILE, controller.signal)
+        .then(({ geojson, metadata: serverMetadata }) => {
+          if (controller.signal.aborted) return
 
-        const routeMetadata =
-          normalizeServerMetadata(serverMetadata) ?? calculateFallbackMetadata(geojson)
+          const routeMetadata =
+            normalizeServerMetadata(serverMetadata) ?? calculateFallbackMetadata(geojson)
 
-        if (!routeMetadata) {
-          failFetching('Invalid route response')
-          return
-        }
+          if (!routeMetadata) {
+            failFetching('Invalid route response')
+            return
+          }
 
-        finishFetching(geojson, routeMetadata)
-      })
-      .catch((err: unknown) => {
-        if (cancelled || fetchId !== fetchIdRef.current) return
-        failFetching(err instanceof Error ? err.message : 'Failed to load route')
-      })
+          finishFetching(geojson, routeMetadata)
+        })
+        .catch((err: unknown) => {
+          if (controller.signal.aborted) return
+          failFetching(err instanceof Error ? err.message : 'Failed to load route')
+        })
+    }, DEBOUNCE_MS)
 
     return () => {
-      cancelled = true
+      clearTimeout(timer)
+      controller.abort()
     }
   }, [failFetching, finishFetching, routeSignature, startFetching])
 }

@@ -26,7 +26,7 @@ export function useAddressAutocomplete({
   useEffect(() => {
     const trimmedQuery = query.trim()
 
-    if (trimmedQuery.length < 2) return
+    if (trimmedQuery.length < 3) return
     if (hasSelectedPoint && trimmedQuery === selectedLabel.trim()) return
 
     let cancelled = false
@@ -53,7 +53,7 @@ export function useAddressAutocomplete({
 
   const showSuggestions =
     focused &&
-    query.trim().length >= 2 &&
+    query.trim().length >= 3 &&
     (status === 'loading' || status === 'error' || suggestions.length > 0 || status === 'success')
 
   const resetSearch = () => {
@@ -63,7 +63,7 @@ export function useAddressAutocomplete({
 
   const updateQuery = (nextQuery: string) => {
     setQuery(nextQuery)
-    if (nextQuery.trim().length < 2) resetSearch()
+    if (nextQuery.trim().length < 3) resetSearch()
   }
 
   const selectSuggestion = (suggestion: AddressSuggestion) => {

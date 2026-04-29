@@ -72,11 +72,12 @@ const normalizeRouteResponse = (data: RawRouteCalculationResponse): RouteCalcula
 export async function fetchRouteWaypoints(
   waypoints: RouteWaypointRequest[],
   profile = 'fastbike',
+  signal?: AbortSignal,
 ): Promise<RouteCalculationResult> {
   const response = await apiClient.post<RawRouteCalculationResponse>(
     '/routes/calculate',
     { waypoints, profile },
-    { timeout: 30000 },
+    { timeout: 30000, signal },
   )
   return normalizeRouteResponse(response.data)
 }

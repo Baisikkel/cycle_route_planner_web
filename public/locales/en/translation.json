@@ -24,7 +24,7 @@
   "Following your route. Long-press map to plan a new one.": "Following your route. Long-press map to plan a new one.",
   "Last name": "Last name",
   "Let's ride": "Let's ride",
-  "Loading routeâ€¦": "Loading routeâ€¦",
+  "Loading route…": "Loading route…",
   "Loading…": "Loading…",
   "Long-press map to set destination": "Long-press map to set destination",
   "Long-press map to set start and destination": "Long-press map to set start and destination",
@@ -55,7 +55,7 @@
   "Start address": "Start address",
   "Stop address": "Stop address",
   "Update password": "Update password",
-  "You are off route. Re-routingâ€¦": "You are off route. Re-routingâ€¦",
+  "You are off route. Re-routing…": "You are off route. Re-routing…",
   "You are signed in as an editor. Admin tools are not visible to this role — sign in as Admin to see the difference.": "You are signed in as an editor. Admin tools are not visible to this role — sign in as Admin to see the difference.",
   "You have manage:account permission. In a real app this section would surface user management, audit logs, and other admin tools.": "You have manage:account permission. In a real app this section would surface user management, audit logs, and other admin tools."
 }

@@ -6,8 +6,8 @@ export function getMapHint(
   loading: boolean,
   hasStart: boolean,
 ): string {
-  if (loading) return t('Loading routeâ€¦')
-  if (isOffRoute) return t('You are off route. Re-routingâ€¦')
+  if (loading) return t('Loading route…')
+  if (isOffRoute) return t('You are off route. Re-routing…')
   if (hasRoute) return t('Following your route. Long-press map to plan a new one.')
   if (hasStart && permission !== 'granted') return t('Long-press map to set destination')
   if (permission === 'granted') return t('Long-press map to set destination')
