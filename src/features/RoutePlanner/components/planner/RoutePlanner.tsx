@@ -105,7 +105,7 @@ export function RoutePlanner({
           <SortableContext items={stopIds} strategy={verticalListSortingStrategy}>
             {stops.map((stop, index) => (
               <SortableStopRow
-                key={stop.id}
+                key={`${stop.id}:${stop.label}:${stop.lat}:${stop.lon}`}
                 waypoint={stop}
                 index={index}
                 badge={`${index + 1}`}

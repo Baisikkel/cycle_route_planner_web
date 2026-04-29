@@ -29,6 +29,7 @@ type RouteState = {
     source?: WaypointSource,
   ) => void
   clearWaypoint: (waypointId: string) => void
+  clearAllWaypoints: () => void
   addStop: () => void
   removeStop: (waypointId: string) => void
   moveStop: (waypointId: string, direction: 'up' | 'down') => void
@@ -115,6 +116,18 @@ export const useRouteStore = createStore<RouteState>((set, get) => ({
         ),
       }
     }),
+
+  clearAllWaypoints: () =>
+    set((state) => ({
+      ...resetRouteResult,
+      waypoints: state.waypoints.map((waypoint) => ({
+        ...waypoint,
+        label: '',
+        lat: null,
+        lon: null,
+        source: 'address',
+      })),
+    })),
 
   addStop: () =>
     set((state) => {

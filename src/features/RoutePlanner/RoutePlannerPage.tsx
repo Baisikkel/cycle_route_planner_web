@@ -34,6 +34,7 @@ export function RoutePlannerPage() {
   const setEnd = useRouteStore((state) => state.setEnd)
   const setWaypointAddress = useRouteStore((state) => state.setWaypointAddress)
   const clearWaypoint = useRouteStore((state) => state.clearWaypoint)
+  const clearAllWaypoints = useRouteStore((state) => state.clearAllWaypoints)
   const addStop = useRouteStore((state) => state.addStop)
   const removeStop = useRouteStore((state) => state.removeStop)
   const reorderStops = useRouteStore((state) => state.reorderStops)
@@ -99,10 +100,8 @@ export function RoutePlannerPage() {
   }, [clearRoute, longPressPopup, position, setEnd, setStart, start, t])
 
   const handleClearAll = useCallback(() => {
-    waypoints.forEach((waypoint) => {
-      clearWaypoint(waypoint.id)
-    })
-  }, [clearWaypoint, waypoints])
+    clearAllWaypoints()
+  }, [clearAllWaypoints])
 
   const markerPos = displayPosition ?? position
   const showLetsRide = !!route && status === 'success' && !isNavigating

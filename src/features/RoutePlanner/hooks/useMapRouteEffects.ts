@@ -60,7 +60,7 @@ export function useMapRouteEffects({
           [minLng, minLat],
           [maxLng, maxLat],
         ],
-        { padding: 60, duration: 500 },
+        { padding: { top: 200, right: 60, bottom: 100, left: 60 }, duration: 500 },
       )
     }, 400)
     return () => clearTimeout(timer)
