@@ -17,8 +17,8 @@ import {
   Spinner,
   SpinnerWrapper,
 } from './PreviewPanel.styled'
-import { formatDistance, formatETA } from '../Map/routeFormatters'
-import type { RouteMetadata, RouteStatus } from '../Map/useRoute'
+import { formatDistance, formatETA } from '../../routing/routeFormatters'
+import type { RouteMetadata, RouteStatus } from '../../routing/types'
 
 type Props = {
   metadata: RouteMetadata | null

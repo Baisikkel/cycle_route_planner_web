@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { notifyError } from '../../lib/notify'
+import { notifyError } from '@lib/notify'
 
 /** 'prompt' = browser hasn't asked yet, 'unsupported' = no GPS API in this browser. */
 type PermissionState = 'prompt' | 'granted' | 'denied' | 'unsupported'

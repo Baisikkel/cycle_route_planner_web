@@ -24,14 +24,15 @@
 import bbox from '@turf/bbox'
 import type { FeatureCollection } from 'geojson'
 import { useCallback, useEffect, useState } from 'react'
-import type { MapRef } from 'react-map-gl/maplibre'
+
+import type { AppMapHandle } from '@components/Map'
 
 type Position = { latitude: number; longitude: number }
 
-/** Street-level zoom for cycling navigation. */
-const NAVIGATION_ZOOM = 16
-/** Slight 3D tilt for better orientation while riding. */
-const NAVIGATION_PITCH = 20
+/** Street-level zoom for cycling navigation — close enough to see buildings and turns. */
+const NAVIGATION_ZOOM = 18
+/** 3D tilt for look-ahead perspective while riding (like Google Maps navigation). */
+const NAVIGATION_PITCH = 50
 /** Smooth animation between GPS ticks (every 1–3 seconds). */
 const EASE_DURATION_MS = 1000
 /** Pixel margin around the route when zooming to show the full route. */
@@ -49,7 +50,7 @@ const ROUTE_BOUNDS_PADDING = 60
  *   offset from geometric center = desired Y - (containerHeight / 2)
  *   padding.top = offset * 2
  */
-function getNavigationPadding(mapRef: React.RefObject<MapRef | null>) {
+function getNavigationPadding(mapRef: React.RefObject<AppMapHandle | null>) {
   const container = mapRef.current?.getContainer()
   const height = container?.clientHeight ?? 700
   const arrowYFromTop = height - 150 - 30
@@ -60,8 +61,6 @@ function getNavigationPadding(mapRef: React.RefObject<MapRef | null>) {
 }
 
 export type NavigationModeState = {
-  /** Whether the user is in active navigation (fullscreen, map follows). */
-  isNavigating: boolean
   /** Whether the map auto-follows the user's position. False when user pans away manually. */
   autoFollow: boolean
   /** Start navigation mode — map enters fullscreen and begins following. */
@@ -88,12 +87,13 @@ export type NavigationModeState = {
  * @param route — current route GeoJSON from useRoute (needed for fitBounds on exit/overview)
  */
 export function useNavigationMode(
-  mapRef: React.RefObject<MapRef | null>,
+  mapRef: React.RefObject<AppMapHandle | null>,
   position: Position | null,
   heading: number | null,
   route: FeatureCollection | null,
+  isNavigating: boolean,
+  setIsNavigating: React.Dispatch<React.SetStateAction<boolean>>,
 ): NavigationModeState {
-  const [isNavigating, setIsNavigating] = useState(false)
   const [autoFollow, setAutoFollow] = useState(false)
 
   /**
@@ -149,7 +149,7 @@ export function useNavigationMode(
     // Push a history entry so the browser back button / swipe-back exits navigation
     // instead of leaving the page. The popstate listener below handles the exit.
     window.history.pushState({ activeRide: true }, '')
-  }, [])
+  }, [setIsNavigating])
 
   /**
    * Exit navigation: return to planning view.
@@ -170,7 +170,7 @@ export function useNavigationMode(
         duration: 300,
       })
     }
-  }, [mapRef])
+  }, [mapRef, setIsNavigating])
 
   /** Re-enable auto-follow after user panned away. */
   const recenter = useCallback(() => {
@@ -237,10 +237,9 @@ export function useNavigationMode(
 
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
-  }, [isNavigating, mapRef])
+  }, [isNavigating, mapRef, setIsNavigating])
 
   return {
-    isNavigating,
     autoFollow,
     startRide,
     stopRide,

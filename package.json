@@ -16,6 +16,9 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@tanstack/react-query": "^5.62.7",
     "@tanstack/react-query-devtools": "^5.62.7",
     "@turf/bbox": "^7.3.4",
@@ -64,7 +67,7 @@
     "vite-tsconfig-paths": "^6.1.1"
   },
   "simple-git-hooks": {
-    "pre-commit": "npm run i18n:extract && git add public/locales && npx lint-staged",
+    "pre-commit": "npx lint-staged && npm run i18n:extract && git add public/locales",
     "pre-push": "npm run lint"
   },
   "lint-staged": {

@@ -3,7 +3,7 @@ import nearestPointOnLine from '@turf/nearest-point-on-line'
 import type { FeatureCollection, LineString } from 'geojson'
 import { useEffect, useRef, useState } from 'react'
 
-import { notifyError } from '../../lib/notify'
+import { notifyError } from '@lib/notify'
 
 type Position = { latitude: number; longitude: number }
 
@@ -53,7 +53,7 @@ function extractLineString(route: FeatureCollection): LineString | null {
  * Coordinate convention:
  *  - Turf.js point() takes [longitude, latitude] (GeoJSON standard)
  *  - snapped.geometry.coordinates returns [longitude, latitude]
- *  - We convert back to { latitude, longitude } for react-map-gl Marker props
+ *  - We convert back to { latitude, longitude } for app map marker props
  */
 /**
  * @param immediateReroute — when true (active navigation), skip the 10s countdown

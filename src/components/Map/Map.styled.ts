@@ -228,3 +228,28 @@ export const NavigationArrowOverlay = styled.div<{ $heading: number | null }>`
   pointer-events: none;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
 `
+
+export const NavigationGpsDot = styled.div`
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.surface};
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+`
+
+export const LoadingBikeOverlay = styled.div`
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  font-size: 2rem;
+  animation: map-loading-bike-spin 1s linear infinite;
+
+  @keyframes map-loading-bike-spin {
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+`

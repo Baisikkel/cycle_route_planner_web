@@ -1,6 +1,6 @@
 import App from '@app/App'
-import { AppMap } from '@components/Map'
 import { AccountPage } from '@features/Account/AccountPage'
+import { RoutePlannerPage } from '@features/RoutePlanner/RoutePlannerPage'
 import { createBrowserRouter, RouterProvider } from '@lib/router'
 
 const router = createBrowserRouter([
@@ -10,7 +10,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <AppMap />,
+        element: <RoutePlannerPage />,
       },
       {
         path: 'account',

@@ -1,4 +1,16 @@
-export { default as AppMap } from './MapLibre'
-export { RouteProvider } from './RouteContext.tsx'
-export { RouteContext } from './RouteContext.ts'
-export type { RouteContextValue, RouteMetadata, RouteStatus } from './useRoute'
+export { AppMapCanvas } from './AppMapCanvas'
+export type {
+  AppMapBounds,
+  AppMapCanvasProps,
+  AppMapEaseOptions,
+  AppMapFitBoundsOptions,
+  AppMapHandle,
+  AppMapMarker,
+  AppMapPadding,
+  AppMapPoint,
+  AppMapPointerEvent,
+  AppMapPosition,
+  AppMapSelectionPopup,
+  AppMapTouchEvent,
+  AppMapViewState,
+} from './mapTypes'

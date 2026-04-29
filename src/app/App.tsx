@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 
-import { AppHeaderActions } from '@app/navigation/AppHeaderActions'
 import { AppLayout } from '@components/Layout'
 import { Outlet } from '@lib/router'
 
@@ -37,7 +36,7 @@ function App() {
   }, [])
 
   return (
-    <AppLayout headerActions={<AppHeaderActions />}>
+    <AppLayout>
       <NotificationToast errorType={activeError} onClose={handleClose} />
       <Outlet />
     </AppLayout>

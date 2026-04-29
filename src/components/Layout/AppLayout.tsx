@@ -11,10 +11,10 @@ type Props = PropsWithChildren<{
   headerActions?: ReactNode
 }>
 
-export function AppLayout({ hideHeader = false, hideFooter = false, headerActions, children }: Props) {
+export function AppLayout({ hideHeader = false, hideFooter = false, children }: Props) {
   return (
     <Page>
-      {!hideHeader && <AppHeader actions={headerActions} />}
+      {!hideHeader && <AppHeader />}
       <Main>
         <Container>{children}</Container>
       </Main>
@@ -22,4 +22,3 @@ export function AppLayout({ hideHeader = false, hideFooter = false, headerAction
     </Page>
   )
 }
-
