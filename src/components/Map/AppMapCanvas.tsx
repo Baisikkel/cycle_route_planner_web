@@ -1,7 +1,13 @@
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
-import Map, { Layer, Marker, NavigationControl, Source } from 'react-map-gl/maplibre'
+import Map, {
+  AttributionControl,
+  Layer,
+  Marker,
+  NavigationControl,
+  Source,
+} from 'react-map-gl/maplibre'
 
 import { LongPressPopup } from './LongPressPopup'
 import { BikeEmoji, LocationPin, NavigationGpsDot, PinDot, PinTip } from './Map.styled'
@@ -45,6 +51,7 @@ export const AppMapCanvas = forwardRef<AppMapHandle, AppMapCanvasProps>(function
         mapRef.current?.easeTo(options)
       },
       getContainer: () => mapRef.current?.getContainer() ?? null,
+      getBearing: () => mapRef.current?.getBearing() ?? 0,
     }),
     [],
   )
@@ -55,6 +62,7 @@ export const AppMapCanvas = forwardRef<AppMapHandle, AppMapCanvasProps>(function
       style={{ width: '100%', height: '100%' }}
       mapStyle={MAP_STYLE}
       initialViewState={initialViewState}
+      attributionControl={false}
       onClick={onMapClick}
       onContextMenu={(event) => {
         onMapContextMenu({
@@ -83,6 +91,7 @@ export const AppMapCanvas = forwardRef<AppMapHandle, AppMapCanvasProps>(function
       }}
     >
       {showNavigationControl && <NavigationControl position="top-right" />}
+      <AttributionControl compact position="bottom-right" />
 
       {userPosition && (
         <Marker latitude={userPosition.latitude} longitude={userPosition.longitude} anchor="bottom">

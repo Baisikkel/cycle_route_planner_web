@@ -4,7 +4,7 @@ export const MapContainer = styled.div<{ $navigationActive?: boolean }>`
   display: flex;
   flex-direction: column;
   width: auto;
-  height: 75vh;
+  height: 90vh;
 
   ${({ $navigationActive }) =>
     $navigationActive &&
@@ -44,12 +44,10 @@ export const MapHint = styled.p`
   color: ${({ theme }) => theme.colors.textMuted};
 `
 
-export const NavigationArrowOverlay = styled.div<{ $heading: number | null }>`
+export const NavigationArrowOverlay = styled.div`
   position: absolute;
   bottom: 155px;
   left: calc(50% - 30px);
-  transform: rotate(${({ $heading }) => ($heading != null ? $heading : 0)}deg);
-  transition: transform 0.5s ease;
   z-index: 5;
   width: 60px;
   height: 60px;

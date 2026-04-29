@@ -59,6 +59,7 @@ export type AppMapHandle = {
   fitBounds: (bounds: AppMapBounds, options?: AppMapFitBoundsOptions) => void
   easeTo: (options: AppMapEaseOptions) => void
   getContainer: () => HTMLElement | null
+  getBearing: () => number
 }
 
 export type AppMapSelectionPopup = {

@@ -31,6 +31,12 @@ export const PlannerHeader = styled.div`
   gap: ${({ theme }) => theme.spacing(2)};
 `
 
+export const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(1)};
+`
+
 export const PlannerTitle = styled.h2`
   margin: 0;
   font-size: 0.95rem;
@@ -39,14 +45,28 @@ export const PlannerTitle = styled.h2`
 `
 
 export const AddStopButton = styled.button`
-  min-height: 40px;
-  padding: ${({ theme }) => `${theme.spacing(2)} ${theme.spacing(3)}`};
+  width: 40px;
+  height: 40px;
   border: 1px solid ${({ theme }) => theme.colors.primary};
   border-radius: ${({ theme }) => theme.radius.sm};
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.primaryDark};
   font: inherit;
+  font-size: 1.2rem;
   font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+`
+
+export const ClearAllButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.sm};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.textMuted};
+  font: inherit;
+  font-size: 1.1rem;
   cursor: pointer;
   touch-action: manipulation;
 `
@@ -55,6 +75,44 @@ export const WaypointList = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing(2)};
+`
+
+export const EstimationPanel = styled.section`
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  padding-top: ${({ theme }) => theme.spacing(2)};
+`
+
+export const EstimationGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: ${({ theme }) => theme.spacing(2)};
+`
+
+export const EstimationItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`
+
+export const EstimationLabel = styled.span`
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: 0.82rem;
+`
+
+export const EstimationValue = styled.span`
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 0.95rem;
+  font-weight: 700;
+`
+
+export const EstimationState = styled.div`
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: 0.9rem;
+`
+
+export const EstimationError = styled.div`
+  color: ${({ theme }) => theme.colors.danger};
+  font-size: 0.9rem;
 `
 
 export const WaypointRowShell = styled.div<{ $dragging?: boolean }>`

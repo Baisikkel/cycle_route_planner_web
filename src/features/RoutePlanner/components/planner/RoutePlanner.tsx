@@ -20,14 +20,19 @@ import { DESTINATION_COLOR, START_COLOR, STOP_COLOR } from './config'
 import * as S from './RoutePlanner.styled'
 import { SortableStopRow } from './SortableStopRow'
 import { WaypointRow } from './WaypointRow'
-import type { RouteWaypoint } from '../../routing/types'
+import { formatDistance, formatETA } from '../../routing/routeFormatters'
+import type { RouteMetadata, RouteStatus, RouteWaypoint } from '../../routing/types'
 
 type RoutePlannerProps = {
   waypoints: RouteWaypoint[]
   stops: RouteWaypoint[]
+  metadata: RouteMetadata | null
+  status: RouteStatus
+  error: string | null
   onSelectAddress: (waypointId: string, suggestion: AddressSuggestion) => void
   onClearWaypoint: (waypointId: string) => void
   onAddStop: () => void
+  onClearAll: () => void
   onRemoveStop: (waypointId: string) => void
   onReorderStops: (activeId: string, overId: string) => void
 }
@@ -35,9 +40,13 @@ type RoutePlannerProps = {
 export function RoutePlanner({
   waypoints,
   stops,
+  metadata,
+  status,
+  error,
   onSelectAddress,
   onClearWaypoint,
   onAddStop,
+  onClearAll,
   onRemoveStop,
   onReorderStops,
 }: RoutePlannerProps) {
@@ -63,9 +72,24 @@ export function RoutePlanner({
     <S.PlannerPanel aria-label={t('Route planner')}>
       <S.PlannerHeader>
         <S.PlannerTitle>{t('Plan route')}</S.PlannerTitle>
-        <S.AddStopButton type="button" onClick={onAddStop}>
-          {t('Add stop')}
-        </S.AddStopButton>
+        <S.HeaderActions>
+          <S.AddStopButton
+            type="button"
+            onClick={onAddStop}
+            title={t('Add stop')}
+            aria-label={t('Add stop')}
+          >
+            +
+          </S.AddStopButton>
+          <S.ClearAllButton
+            type="button"
+            onClick={onClearAll}
+            title={t('Clear all')}
+            aria-label={t('Clear all')}
+          >
+            x
+          </S.ClearAllButton>
+        </S.HeaderActions>
       </S.PlannerHeader>
       <S.WaypointList>
         <WaypointRow
@@ -86,7 +110,7 @@ export function RoutePlanner({
                 index={index}
                 badge={`${index + 1}`}
                 badgeColor={STOP_COLOR}
-                placeholder={t('Stop address')}
+                placeholder={t('Next stop')}
                 onSelectAddress={onSelectAddress}
                 onClearWaypoint={onClearWaypoint}
                 onRemoveStop={onRemoveStop}
@@ -104,6 +128,24 @@ export function RoutePlanner({
           onClearWaypoint={onClearWaypoint}
         />
       </S.WaypointList>
+      {(status !== 'idle' || error) && (
+        <S.EstimationPanel>
+          {status === 'loading' && <S.EstimationState>{t('Loading route…')}</S.EstimationState>}
+          {status === 'error' && error && <S.EstimationError>{error}</S.EstimationError>}
+          {status === 'success' && metadata && (
+            <S.EstimationGrid>
+              <S.EstimationItem>
+                <S.EstimationLabel>{t('Distance')}</S.EstimationLabel>
+                <S.EstimationValue>{formatDistance(metadata.distanceMeters)}</S.EstimationValue>
+              </S.EstimationItem>
+              <S.EstimationItem>
+                <S.EstimationLabel>{t('ETA')}</S.EstimationLabel>
+                <S.EstimationValue>{formatETA(metadata.etaSeconds)}</S.EstimationValue>
+              </S.EstimationItem>
+            </S.EstimationGrid>
+          )}
+        </S.EstimationPanel>
+      )}
     </S.PlannerPanel>
   )
 }

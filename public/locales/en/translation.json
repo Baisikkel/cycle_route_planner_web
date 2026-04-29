@@ -8,6 +8,7 @@
   "Baisikkel Route Planner. All rights reserved.": "en",
   "Cancel ride": "Cancel ride",
   "Clear address": "Clear address",
+  "Clear all": "Clear all",
   "Close": "Close",
   "Collapse panel": "Collapse panel",
   "Confirm new password": "Confirm new password",
@@ -30,6 +31,7 @@
   "Long-press map to set start and destination": "Long-press map to set start and destination",
   "Manage your profile and preferences.": "Manage your profile and preferences.",
   "New password": "New password",
+  "Next stop": "Next stop",
   "No address results": "No address results",
   "notifications": {
     "close": "Close"
@@ -53,7 +55,6 @@
   "Sign in to see role-based content on this page.": "Sign in to see role-based content on this page.",
   "Signed in as {{name}} ({{role}})": "Signed in as {{name}} ({{role}})",
   "Start address": "Start address",
-  "Stop address": "Stop address",
   "Update password": "Update password",
   "You are off route. Re-routing…": "You are off route. Re-routing…",
   "You are signed in as an editor. Admin tools are not visible to this role — sign in as Admin to see the difference.": "You are signed in as an editor. Admin tools are not visible to this role — sign in as Admin to see the difference.",
